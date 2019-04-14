@@ -31,7 +31,7 @@ class Redis extends SessionHandler
         'expire'       => 3600, // 有效期(秒)
         'timeout'      => 0, // 超时时间(秒)
         'persistent'   => true, // 是否长连接
-        'session_name' => '', // sessionkey前缀
+        'session_name' => '', // sessionKey前缀
     ];
 
     /**
@@ -69,7 +69,6 @@ class Redis extends SessionHandler
         if (0 != $this->config['select']) {
             $this->handler->select($this->config['select']);
         }
-
         return true;
     }
 

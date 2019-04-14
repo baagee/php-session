@@ -18,20 +18,7 @@ interface SessionInterface
      * @param string $prefix
      * @return mixed
      */
-    public static function start(string $prefix);
-
-    /**
-     * 暂停Session
-     * @return mixed
-     */
-    public static function pause();
-
-    /**
-     * 重新生成SessionId
-     * @param bool $delete 是否删除关联会话文件
-     * @return mixed
-     */
-    public static function regenerate(bool $delete = false);
+    public static function start(string $prefix='');
 
     /**
      * 设置值

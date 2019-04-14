@@ -27,23 +27,25 @@ abstract class SessionAbstract
     protected static $prefix = '';
 
     /**
-     * 设置或者获取session作用域（前缀）
-     * @param string $prefix
-     * @return bool|string
+     * @return string
      */
-    final public static function prefix(string $prefix = '')
+    final public static function getPrefix(): string
     {
-        if (empty($prefix) && null !== $prefix) {
-            return static::$prefix;
-        } else {
-            static::$prefix = $prefix;
-            return true;
-        }
+        return self::$prefix;
+    }
+
+    /**
+     * @param string $prefix
+     */
+    final public static function setPrefix(string $prefix)
+    {
+        self::$prefix = $prefix;
     }
 
     /**
      * session初始化
      * @param array $config
+     * @throws \Exception
      */
     final public static function init(array $config = [])
     {
@@ -51,21 +53,16 @@ abstract class SessionAbstract
             if (isset($config['use_trans_sid'])) {
                 ini_set('session.use_trans_sid', $config['use_trans_sid'] ? 1 : 0);
             }
-            $isDoStart = false;
-            // 启动session
-            if (!empty($config['auto_start']) && PHP_SESSION_ACTIVE === session_status()) {
-                // 配置了自动开启session，并且session开启
-                // ini_set('session.auto_start', 0);
-                $isDoStart = true;
+            if (session_status() == PHP_SESSION_ACTIVE) {
+                // 销毁之前自动开启的session
                 if (!empty($_SESSION)) {
                     $_SESSION = [];
                 }
                 session_unset();
                 session_destroy();
             }
-
-            if (isset($config['prefix']) && ('' === self::$prefix || null === self::$prefix)) {
-                self::$prefix = $config['prefix'];
+            if (isset($config['prefix']) && ('' === static::$prefix || null === static::$prefix)) {
+                static::$prefix = $config['prefix'];
             }
             if (isset($config['var_session_id']) && isset($_REQUEST[$config['var_session_id']])) {
                 session_id($_REQUEST[$config['var_session_id']]);
@@ -110,10 +107,10 @@ abstract class SessionAbstract
                     }
                 }
             }
-            if ($isDoStart) {
+            if (isset($config['auto_start']) && !empty($config['auto_start'])) {
                 session_start();
             }
         }
-        self::$init = true;
+        static::$init = true;
     }
 }
