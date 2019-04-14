@@ -60,6 +60,7 @@ abstract class SessionAbstract
                 }
                 session_unset();
                 session_destroy();
+                // var_dump(__METHOD__ . session_status());
             }
             if (isset($config['prefix']) && ('' === static::$prefix || null === static::$prefix)) {
                 static::$prefix = $config['prefix'];

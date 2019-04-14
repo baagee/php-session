@@ -15,7 +15,7 @@ use BaAGee\Session\Base\SessionInterface;
  * Class Session
  * @package BaAGee\Session
  */
-class Session extends SessionAbstract implements SessionInterface
+final class Session extends SessionAbstract implements SessionInterface
 {
     /**
      * 检查session是否初始化了
@@ -39,6 +39,7 @@ class Session extends SessionAbstract implements SessionInterface
     public static function set(string $key, $value, string $prefix = '')
     {
         self::checkSessionInit();
+        self::autoStart();
         $prefix = !empty($prefix) ? $prefix : self::$prefix;
         if (strpos($key, '.')) {
             // 二维数组赋值
@@ -65,6 +66,7 @@ class Session extends SessionAbstract implements SessionInterface
     public static function get(string $key, string $prefix = '')
     {
         self::checkSessionInit();
+        self::autoStart();
         $prefix = !empty($prefix) ? $prefix : self::$prefix;
         if ('' == $key) {
             // 获取全部的session
@@ -98,6 +100,7 @@ class Session extends SessionAbstract implements SessionInterface
     public static function delete(string $key, string $prefix = '')
     {
         self::checkSessionInit();
+        self::autoStart();
         $prefix = !empty($prefix) ? $prefix : self::$prefix;
         if (strpos($key, '.')) {
             list($name1, $name2) = explode('.', $key);
@@ -123,6 +126,7 @@ class Session extends SessionAbstract implements SessionInterface
     public static function destroy()
     {
         self::checkSessionInit();
+        self::autoStart();
         if (!empty($_SESSION)) {
             $_SESSION = [];
         }
@@ -140,6 +144,7 @@ class Session extends SessionAbstract implements SessionInterface
     public static function clear(string $prefix = '')
     {
         self::checkSessionInit();
+        self::autoStart();
         $prefix = !empty($prefix) ? $prefix : self::$prefix;
         if ($prefix) {
             unset($_SESSION[$prefix]);
@@ -156,9 +161,9 @@ class Session extends SessionAbstract implements SessionInterface
      */
     public static function start(string $prefix = '')
     {
-        if (session_status() === PHP_SESSION_DISABLED) {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
             self::checkSessionInit();
-            session_start();
+            self::autoStart();
         }
         self::setPrefix($prefix);
     }
@@ -173,6 +178,7 @@ class Session extends SessionAbstract implements SessionInterface
     public static function has(string $key, $prefix = '')
     {
         self::checkSessionInit();
+        self::autoStart();
         $prefix = !empty($prefix) ? $prefix : self::$prefix;
         if (strpos($key, '.')) {
             // 支持数组
@@ -180,6 +186,18 @@ class Session extends SessionAbstract implements SessionInterface
             return $prefix ? isset($_SESSION[$prefix][$name1][$name2]) : isset($_SESSION[$name1][$name2]);
         } else {
             return $prefix ? isset($_SESSION[$prefix][$key]) : isset($_SESSION[$key]);
+        }
+    }
+
+    /**
+     * 自动开启session
+     */
+    private static function autoStart()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            // var_dump(__METHOD__ . session_status());
+            session_start();
+            // var_dump(__METHOD__ . session_status());
         }
     }
 }

@@ -15,23 +15,27 @@ $config = [
     'host'         => '127.0.0.1', // redis主机
     'port'         => 6379, // redis端口
     'password'     => '', // 密码
-    'select'       => 1, // 操作库
+    'select'       => 2, // 操作库
     'expire'       => 3600, // 有效期(秒)
     'timeout'      => 0, // 超时时间(秒)
     'persistent'   => false, // 是否长连接
     'session_name' => 'session_', // sessionkey前缀
-    'auto_start'   => 1,// 是否自动开启session
+    // 'auto_start'   => 1,// 是否自动开启session
     'use_cookies'   =>1
 ];
 //初始化
 Session::init($config);
 // 开启 并且可以设置全局作用域
-Session::start('prefix1');
+// Session::start('prefix1');
 // 设置session
 Session::set('time1', time());
 // 获取
 var_dump(Session::get('time1'));
+// Session::destroy();
 var_dump($_SESSION);
+
+
+die;
 //删除
 Session::delete('time1');
 
@@ -66,7 +70,7 @@ var_dump($_SESSION);
   }
 }*/
 // 只会删除最后一次设置的全局作用域
-Session::clear();
+// Session::clear();
 var_dump($_SESSION);
 /*array(2) {
   ["prefix1"]=>
@@ -79,7 +83,7 @@ var_dump($_SESSION);
   }
 }*/
 //删除指定的作用域
-Session::clear('user');
+// Session::clear('user');
 var_dump($_SESSION);
 /*array(1) {
   ["prefix1"]=>
@@ -87,5 +91,5 @@ var_dump($_SESSION);
   }
 }*/
 //销毁全部session
-\BaAGee\Session\Session::destroy();
+// \BaAGee\Session\Session::destroy();
 echo 'over';
