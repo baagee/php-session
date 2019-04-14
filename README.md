@@ -91,30 +91,30 @@ echo 'over';
 
 # 支持的配置项
 ```
-参数      	描述
-handler	session类型 
-expire	session过期时间
-prefix	session前缀
-auto_start	是否自动开启
-use_trans_sid	是否使用use_trans_sid
-var_session_id	请求session_id变量名
-id	session_id
-name	session_name
-path	session保存路径
-domain	session cookie_domain
-use_cookies	是否使用cookie
-cache_limiter	session_cache_limiter
-cache_expire	session_cache_expire
-secure session.cookie_secure 的配置
+参数                  描述
+handler	            session类型 
+expire	            session过期时间
+prefix	            session前缀
+auto_start	        是否自动开启
+use_trans_sid	    是否使用use_trans_sid
+var_session_id	    请求session_id变量名
+id	                session_id
+name	            session_name
+path	            session保存路径
+domain	            session cookie_domain
+use_cookies	        是否使用cookie
+cache_limiter	    session_cache_limiter
+cache_expire	    session_cache_expire
+secure              session.cookie_secure 的配置
 ```
 
 # 内置支持的handler及其扩充的配置:
 ```php
 \BaAGee\Session\Handler\Memcache::class;
-// 配置
+// 配置 支持集群
 protected $config = [
-    'host'         => '127.0.0.1', // memcache主机
-    'port'         => 11211, // memcache端口
+    'host'         => '127.0.0.1', // memcache主机 集群示例：'127.0.0.1,127.0.0.2'
+    'port'         => 11211, // memcache端口 集群示例：11211,11222 顺序和host对应
     'expire'       => 3600, // session有效期
     'timeout'      => 0, // 连接超时时间（单位：毫秒）
     'persistent'   => true, // 长连接
@@ -123,8 +123,8 @@ protected $config = [
 \BaAGee\Session\Handler\Memcached::class;
 // 配置
 protected $config = [
-    'host'         => '127.0.0.1', // memcache主机
-    'port'         => 11211, // memcache端口
+    'host'         => '127.0.0.1', // memcache主机 memcache主机 集群示例：'127.0.0.1,127.0.0.2'
+    'port'         => 11211, // memcache端口 集群示例：11211,11222 顺序和host对应
     'expire'       => 3600, // session有效期
     'timeout'      => 0, // 连接超时时间（单位：毫秒）
     'session_name' => '', // memcache key前缀
