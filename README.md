@@ -105,6 +105,7 @@ domain	session cookie_domain
 use_cookies	是否使用cookie
 cache_limiter	session_cache_limiter
 cache_expire	session_cache_expire
+secure session.cookie_secure 的配置
 ```
 
 # 内置支持的handler及其扩充的配置:
