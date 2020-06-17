@@ -180,6 +180,7 @@ final class Session extends SessionAbstract implements SessionInterface
         self::checkSessionInit();
         self::autoStart();
         $prefix = !empty($prefix) ? $prefix : self::$prefix;
+        $key = trim($key, '. \t\n\r\0\x0B');
         if (strpos($key, '.')) {
             // 支持数组
             list($name1, $name2) = explode('.', $key);

@@ -24,13 +24,13 @@ class Memcached extends SessionHandler
      * @var array
      */
     protected $config = [
-        'host'         => '127.0.0.1', // memcache主机
-        'port'         => 11211, // memcache端口
-        'expire'       => 3600, // session有效期
-        'timeout'      => 0, // 连接超时时间（单位：毫秒）
+        'host' => '127.0.0.1', // memcache主机
+        'port' => 11211, // memcache端口
+        'expire' => 3600, // session有效期
+        'timeout' => 0, // 连接超时时间（单位：毫秒）
         'session_name' => '', // memcache key前缀
-        'username'     => '', //账号
-        'password'     => '', //密码
+        'username' => '', //账号
+        'password' => '', //密码
     ];
 
     /**
@@ -60,6 +60,8 @@ class Memcached extends SessionHandler
         if ($this->config['timeout'] > 0) {
             $this->handler->setOption(\Memcached::OPT_CONNECT_TIMEOUT, $this->config['timeout']);
         }
+        //重要，php memcached有个bug，当get的值不存在，有固定40ms延迟，开启这个参数，可以避免这个bug
+        $this->handler->setOption(\Memcached::OPT_TCP_NODELAY, true);
         // 支持集群
         $hosts = explode(',', $this->config['host']);
         $ports = explode(',', $this->config['port']);
@@ -121,7 +123,8 @@ class Memcached extends SessionHandler
      */
     public function destroy($sessionId)
     {
-        return $this->handler->delete($this->config['session_name'] . $sessionId);
+        $this->handler->delete($this->config['session_name'] . $sessionId);
+        return true;
     }
 
     /**

@@ -31,7 +31,7 @@ abstract class SessionAbstract
      */
     final public static function getPrefix(): string
     {
-        return self::$prefix;
+        return static::$prefix;
     }
 
     /**
@@ -39,7 +39,7 @@ abstract class SessionAbstract
      */
     final public static function setPrefix(string $prefix)
     {
-        self::$prefix = $prefix;
+        static::$prefix = $prefix;
     }
 
     /**
